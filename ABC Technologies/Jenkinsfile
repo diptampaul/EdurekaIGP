@@ -10,7 +10,7 @@ pipeline
         {
             steps
             {
-                git 'https://github.com/diptampaul/EdurekaIGP.git'
+                git url: 'https://github.com/diptampaul/EdurekaIGP.git', branch: 'main'
             }
         }
         
