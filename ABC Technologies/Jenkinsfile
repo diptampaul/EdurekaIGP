@@ -1,0 +1,47 @@
+pipeline
+{
+    agent any
+    tools {
+        maven 'Maven'
+    }
+    stages
+    {
+        stage('Code Checkout')
+        {
+            steps
+            {
+                git 'https://github.com/diptampaul/EdurekaIGP.git'
+            }
+        }
+        
+        stage('Code Compile')
+        {
+            steps
+            {
+                dir('ABC Technologies') {
+                    sh 'mvn compile'
+                }
+            }
+        }
+
+        stage('Unit Test')
+        {
+            steps
+            {
+                dir('ABC Technologies') {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Code packaging')
+        {
+            steps
+            {
+                dir('ABC Technologies') {
+                    sh 'mvn package'
+                }
+            }
+        }
+    }
+}
