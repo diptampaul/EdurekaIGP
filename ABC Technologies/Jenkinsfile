@@ -77,12 +77,12 @@ pipeline
 		// 	}
 		// }
 
-		// stage('Deploy as container')
-		// {
-		// 	steps
-		// 	{
-		// 		sh 'docker run -itd -P jsachdev07/abc_tech:$BUILD_NUMBER'
-		// 	}
-		// }
+		stage('Deploy as container')
+		{
+			steps
+			{
+				sh 'docker run -itd -P jsachdev07/abc_tech:$BUILD_NUMBER'
+			}
+		}
     }
 }
