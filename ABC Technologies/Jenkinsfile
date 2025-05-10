@@ -54,22 +54,15 @@ pipeline
             }
         }
 
-        stage('Copy war file')
-        {
-            steps
-            {
-                dir('ABC Technologies') {
-                    sh 'cp "$WORKSPACE/ABC Technologies/target/ABCtechnologies-1.0.war" "$WORKSPACE/abc.war"'
-                }
-            }
-        }
-
         stage('Build Docker Image')
         {
             steps
             {
-                sh 'docker build -t abc_tech:$BUILD_NUMBER .'
-                sh 'docker tag abc_tech:$BUILD_NUMBER jsachdev07/abc_tech:$BUILD_NUMBER'
+                dir('ABC Technologies') {
+                    sh 'cp "$WORKSPACE/ABC Technologies/target/ABCtechnologies-1.0.war" ./abc.war'
+                    sh 'docker build -t abc_tech:$BUILD_NUMBER .'
+                    sh 'docker tag abc_tech:$BUILD_NUMBER jsachdev07/abc_tech:$BUILD_NUMBER'
+                }
             }
         }
 
