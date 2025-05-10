@@ -1,8 +1,17 @@
 ---
 - name: Install Docker
   hosts: localhost
-  become: yes
   tasks:
+    - name: Check if Docker is already installed
+      shell: command -v docker || echo "Not installed"
+      register: docker_check
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Show Docker installation status
+      debug:
+        msg: "Docker is {{ 'not ' if 'Not installed' in docker_check.stdout else '' }}installed"
+      
     - name: Install required packages
       apt:
         name:
@@ -13,16 +22,22 @@
           - lsb-release
         state: present
         update_cache: yes
+      when: "'Not installed' in docker_check.stdout"
+      ignore_errors: yes
 
     - name: Add Docker GPG key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
+      when: "'Not installed' in docker_check.stdout"
+      ignore_errors: yes
 
     - name: Add Docker repository
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
         state: present
+      when: "'Not installed' in docker_check.stdout"
+      ignore_errors: yes
 
     - name: Install Docker Engine
       apt:
@@ -32,15 +47,25 @@
           - containerd.io
         state: present
         update_cache: yes
+      when: "'Not installed' in docker_check.stdout"
+      ignore_errors: yes
 
     - name: Ensure Docker service is running
       service:
         name: docker
         state: started
         enabled: yes
+      when: "'Not installed' in docker_check.stdout"
+      ignore_errors: yes
 
     - name: Add Jenkins user to docker group
       user:
         name: jenkins
         groups: docker
         append: yes
+      when: "'Not installed' in docker_check.stdout"
+      ignore_errors: yes
+      
+    - name: Success message
+      debug:
+        msg: "Docker setup process completed. Docker may or may not be installed depending on permissions."

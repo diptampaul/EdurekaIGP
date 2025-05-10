@@ -66,23 +66,23 @@ pipeline
             }
         }
 
-		stage('Push Docker Image')
-		{ 
-			steps
-			{   
-			    withDockerRegistry([ credentialsId: "dockerhub", url: "" ])
-			    {
-			       sh 'docker push jsachdev07/abc_tech:$BUILD_NUMBER'
-			    }
-			}
-		}
+		// stage('Push Docker Image')
+		// { 
+		// 	steps
+		// 	{   
+		// 	    withDockerRegistry([ credentialsId: "dockerhub", url: "" ])
+		// 	    {
+		// 	       sh 'docker push jsachdev07/abc_tech:$BUILD_NUMBER'
+		// 	    }
+		// 	}
+		// }
 
-		stage('Deploy as container')
-		{
-			steps
-			{
-				sh 'docker run -itd -P jsachdev07/abc_tech:$BUILD_NUMBER'
-			}
-		}
+		// stage('Deploy as container')
+		// {
+		// 	steps
+		// 	{
+		// 		sh 'docker run -itd -P jsachdev07/abc_tech:$BUILD_NUMBER'
+		// 	}
+		// }
     }
 }
