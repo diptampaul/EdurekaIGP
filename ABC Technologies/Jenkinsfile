@@ -43,5 +43,43 @@ pipeline
                 }
             }
         }
+
+        stage('install docker using ansible')
+		{
+			steps
+			{
+				sh 'ansible-playbook docker.yaml'
+			}
+		}
+
+
+		stage('Build Docker Image')
+		{
+			steps
+			{
+			        sh 'cp /var/lib/jenkins/workspace/$JOB_NAME/target/abc-technologies-app.war /var/lib/jenkins/workspace/$JOB_NAME/abc.war'
+                                sh 'docker build -t abc_tech:$BUILD_NUMBER .'
+				sh 'docker tag abc_tech:$BUILD_NUMBER jsachdev07/abc_tech:$BUILD_NUMBER'
+			}
+		}
+
+		stage('Push Docker Image')
+		{ 
+			steps
+			{   
+			    withDockerRegistry([ credentialsId: "dockerhub", url: "" ])
+			    {
+			       sh 'docker push jsachdev07/abc_tech:$BUILD_NUMBER'
+			    }
+			}
+		}
+
+		stage('Deploy as container')
+		{
+			steps
+			{
+				sh 'docker run -itd -P jsachdev07/abc_tech:$BUILD_NUMBER'
+			}
+		}
     }
 }
