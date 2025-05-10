@@ -45,22 +45,24 @@ pipeline
         }
 
         stage('install docker using ansible')
-		{
-			steps
-			{
-				sh 'ansible-playbook docker.yaml'
-			}
-		}
-
+        {
+            steps
+            {
+                dir('ABC Technologies') {
+                    sh 'ansible-playbook ../docker.yaml || echo "Ansible playbook execution failed, continuing pipeline..."'
+                }
+            }
+        }
 
         stage('Build Docker Image')
         {
             steps
             {
-                sh 'ls "/var/jenkins_home/workspace/$JOB_NAME/ABC Technologies/target/"'
-                sh 'cp "/var/jenkins_home/workspace/$JOB_NAME/ABC Technologies/target/ABCtechnologies-1.0.war" "/var/jenkins_home/workspace/$JOB_NAME/abc.war"'
-                sh 'docker build -t abc_tech:$BUILD_NUMBER .'
-                sh 'docker tag abc_tech:$BUILD_NUMBER jsachdev07/abc_tech:$BUILD_NUMBER'
+                dir(env.WORKSPACE) {
+                    sh 'cp "$WORKSPACE/ABC Technologies/target/ABCtechnologies-1.0.war" "$WORKSPACE/abc.war"'
+                    sh 'docker build -t abc_tech:$BUILD_NUMBER .'
+                    sh 'docker tag abc_tech:$BUILD_NUMBER jsachdev07/abc_tech:$BUILD_NUMBER'
+                }
             }
         }
 
