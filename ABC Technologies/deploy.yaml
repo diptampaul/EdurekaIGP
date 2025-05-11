@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abc-tech-deployment
+  labels:
+    app: abc-tech
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: abc-tech
+  template:
+    metadata:
+      labels:
+        app: abc-tech
+    spec:
+      containers:
+      - name: abc-tech
+        image: diptampaul/abc_tech:7
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abc-tech-service
+spec:
+  selector:
+    app: abc-tech
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    nodePort: 32768
+  type: NodePort
