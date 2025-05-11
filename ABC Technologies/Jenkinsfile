@@ -61,7 +61,7 @@ pipeline
                 dir('ABC Technologies') {
                     sh 'cp "$WORKSPACE/ABC Technologies/target/ABCtechnologies-1.0.war" ./abc.war'
                     sh 'docker build -t abc_tech:$BUILD_NUMBER .'
-                    sh 'docker tag abc_tech:$BUILD_NUMBER jsachdev07/abc_tech:$BUILD_NUMBER'
+                    sh 'docker tag abc_tech:$BUILD_NUMBER diptampaul/abc_tech:$BUILD_NUMBER'
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline
 		// 	{   
 		// 	    withDockerRegistry([ credentialsId: "dockerhub", url: "" ])
 		// 	    {
-		// 	       sh 'docker push jsachdev07/abc_tech:$BUILD_NUMBER'
+		// 	       sh 'docker push diptampaul/abc_tech:$BUILD_NUMBER'
 		// 	    }
 		// 	}
 		// }
@@ -81,7 +81,7 @@ pipeline
 		{
 			steps
 			{
-				sh 'docker run -itd -P jsachdev07/abc_tech:$BUILD_NUMBER'
+				sh 'docker run -itd -P diptampaul/abc_tech:$BUILD_NUMBER'
 			}
 		}
     }
